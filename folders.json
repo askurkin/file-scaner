@@ -1,0 +1,42 @@
+[
+  {
+    "name": "SPSS",
+    "path": "C:\\Git\\rc\\Production\\SPSS\\RC\\src"
+  },
+  {
+    "name": "REPLICA",
+    "path": "C:\\Git\\rc\\Production\\SPSS\\REPLICA\\src"
+  },
+  {
+    "name": "MDM",
+    "path": "C:\\Git\\rc\\Production\\SPSS\\MDM\\src"
+  },
+  {
+    "name": "ANALIT",
+    "path": "C:\\Git\\rc\\Production\\ANALIT\\ANALITIC\\src"
+  },
+  {
+    "name": "STAT",
+    "path": "C:\\Git\\rc\\Production\\STAT\\RC\\src"
+  },
+  {
+    "name": "ORACLEBI",
+    "path": "C:\\Git\\rc\\Production\\STAT\\ORACLEBI\\src"
+  },
+  {
+    "name": "FEES",
+    "path": "C:\\Git\\rc\\Production\\FEES\\RC\\src"
+  },
+  {
+    "name": "QW",
+    "path": "C:\\Git\\rc\\Production\\QW\\RC\\src"
+  },
+  {
+    "name": "QWSTAT",
+    "path": "C:\\Git\\rc\\Production\\QWSTAT\\RC\\src"
+  },
+  {
+    "name": "FINANCE",
+    "path": "C:\\Git\\rc\\Production\\FINANCE\\RC\\src"
+  }
+]
