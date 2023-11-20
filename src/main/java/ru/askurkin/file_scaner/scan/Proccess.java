@@ -76,7 +76,7 @@ public class Proccess {
 	}
 
 	public static boolean questions(FolderFile fromFile, FolderFile toFile) {
-		if (fromFile.getPath().equals(toFile.getPath()) || !fromFile.exists()) {
+		if (fromFile.equals(toFile) || !fromFile.exists()) {
 			logger.warn("Не доступно " + fromFile + " => " + toFile);
 			return false;
 		}
