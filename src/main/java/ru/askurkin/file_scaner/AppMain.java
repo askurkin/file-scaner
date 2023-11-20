@@ -48,8 +48,9 @@ public class AppMain {
 			scans.restore();
 		}
 
-		if (cmd == CMD_PARAMS.cp) {
-			//TODO
+		if (cmd == CMD_PARAMS.cp && !setting.getFilterDir().isEmpty()) {
+			System.out.println("Копирование");
+			scans.copy(setting.getFilterDir());
 		}
 
 	}

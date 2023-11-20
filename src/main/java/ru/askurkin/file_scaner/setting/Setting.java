@@ -42,6 +42,10 @@ public class Setting {
 		files = new HashSet<>();
 	}
 
+	public String getFilterDir() {
+		return filterDir;
+	}
+
 	public boolean checkFilterDir(String dirName) {
 		if (filterDir.isEmpty()) {
 			return true;

@@ -16,6 +16,5 @@
             <AppenderRef ref="STDOUT"/>
             <AppenderRef ref="FILE"/>
         </Root>
-        <Logger name="ru.otus.http.server" level="info"/>
     </Loggers>
 </Configuration>

@@ -1,5 +1,11 @@
 package ru.askurkin.file_scaner.scan;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.sql.Timestamp;
 
 import org.apache.logging.log4j.LogManager;
@@ -15,13 +21,13 @@ import java.util.Scanner;
 public class Proccess {
 	private static final Logger logger = LogManager.getLogger(Proccess.class);
 
-	public static void copyFile(File inFile, File outFile) {
-		try (FileInputStream in = new FileInputStream(inFile.getPath());
-			 FileOutputStream out = new FileOutputStream(outFile.getPath())) {
-			int ch = in.read();
-			while (ch != -1) {
-				out.write(ch);
-				ch = in.read();
+	public static void copyFile(File inFile, File outFile, String schemaOld, String schemaNew) {
+		try (DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream(inFile.getPath())));
+			 DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(outFile.getPath())))) {
+			String buff = in.readLine();
+			while (!buff.isEmpty()) {
+				out.writeBytes(buff.replace(schemaOld, schemaNew));
+				buff = in.readLine();
 			}
 		} catch (FileNotFoundException e) {
 			throw new RuntimeException(e);
@@ -45,7 +51,7 @@ public class Proccess {
 				throw new RuntimeException("Backup " + fileBak.getName() + " is exists, try delete backup!!");
 			}
 			file.renameTo(fileBak);
-			copyFile(fileNew, file);
+			copyFile(fileNew, file, folderFileNew.getSchema(), folderFileOld.getSchema());
 		}
 	}
 

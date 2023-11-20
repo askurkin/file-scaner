@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import ru.askurkin.file_scaner.setting.SysFolders;
 import ru.askurkin.file_scaner.setting.Setting;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -67,9 +68,7 @@ public class Scans {
 	public void sync() {
 		scanFolders.forEach((folderName, scanFolder) -> {
 			if (setting.checkFilterDir(folderName)) {
-				scanFolder.getFiles().forEach((fileName, folderFile) ->
-						Proccess.replace(folderFile, idealFolder.getFolderFile(fileName))
-				);
+				scanFolder.getFiles().forEach((fileName, folderFile) -> Proccess.replace(folderFile, idealFolder.getFolderFile(fileName)));
 			}
 		});
 	}
@@ -77,10 +76,14 @@ public class Scans {
 	public void restore() {
 		scanFolders.forEach((folderName, scanFolder) -> {
 			if (setting.checkFilterDir(folderName)) {
-				scanFolder.getFiles().forEach((fileName, folderFile) ->
-						Proccess.restore(folderFile)
-				);
+				scanFolder.getFiles().forEach((fileName, folderFile) -> Proccess.restore(folderFile));
 			}
+		});
+	}
+
+	public void copy(String toDir) {
+		idealFolder.getFiles().forEach((fileName, folderFile) -> {
+			Proccess.copyFile(folderFile.getFile(), new File(toDir + "\\" + fileName), folderFile.getSchema(), " rc.");
 		});
 	}
 }
