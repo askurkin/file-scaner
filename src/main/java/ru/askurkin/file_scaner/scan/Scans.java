@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 import ru.askurkin.file_scaner.setting.SysFolders;
 import ru.askurkin.file_scaner.setting.Setting;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -85,7 +84,7 @@ public class Scans {
 		ScanFolder toFolder = scanFolders.get(toDir);
 		if (toFolder != null) {
 			idealFolder.getFiles().forEach((fileName, idealFile) -> {
-				Proccess.copyFile(idealFile, new FolderFile(toFolder.getPath(fileName)));
+				Proccess.copy(idealFile, toFolder.getPath(fileName));
 			});
 		}
 	}

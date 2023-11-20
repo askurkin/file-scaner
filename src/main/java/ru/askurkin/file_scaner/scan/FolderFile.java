@@ -1,56 +1,34 @@
 package ru.askurkin.file_scaner.scan;
 
 import java.io.File;
+import java.sql.Timestamp;
+import java.util.Objects;
 
 public class FolderFile extends File {
 	private String name;
-	private String path;
 	public final static String backup = "backup";
 	private String backupPath;
-	private long lastModified;
-	private long size;
 
 	public String getName() {
 		return name;
 	}
 
-	public String getPath() {
-		return path;
-	}
-
-	public long getLastModified() {
-		return lastModified;
-	}
-
 	public long getSize() {
-		return size - getSchema().length();
+		return super.length() - getSchema().length();
 	}
 
 	public String getBackupPath() {
 		return backupPath;
 	}
 
-
 	public FolderFile(String path) {
 		super(path);
-		this.path = path;
 		this.name = getFileNameWithDir(path);
 		this.backupPath = path.replace(this.name, "") + backup + "\\" + this.name;
-		this.lastModified = 0;
-		this.size = 0;
-	}
-
-	public FolderFile(String path, long lastModified, long size) {
-		super(path);
-		this.path = path;
-		this.name = getFileNameWithDir(path);
-		this.backupPath = path.replace(this.name, "") + backup + "\\" + this.name;
-		this.lastModified = lastModified;
-		this.size = size;
 	}
 
 	public String getSchema() {
-		String schema = path.replace("\\" + name, "");
+		String schema = super.getPath().replace("\\" + name, "");
 		return " " + schema.substring(schema.lastIndexOf("\\", schema.lastIndexOf("\\") - 1) + 1, schema.lastIndexOf("\\")).toLowerCase() + ".";
 	}
 
@@ -73,12 +51,19 @@ public class FolderFile extends File {
 		return super.renameTo(new File(backupPath));
 	}
 
-	public void renameTo(FolderFile newFile) {
-		File file = new File(path);
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		if (!super.equals(o)) return false;
+		FolderFile that = (FolderFile) o;
+		return Objects.equals(super.getPath(), that.getPath()) || getSize() == that.getSize() || this.length() == that.length();
 	}
 
 	@Override
 	public String toString() {
-		return name + "\n{lastModified=" + lastModified + ", size=" + size + ", path=" + path + ", backupPath=" + backupPath + " '}";
+		return String.format("%1$s; size: %2$d bytes; modified: %3$tY-%3$tm-%3$td %3$tH:%3$tM",
+//				name,
+				super.getPath(), super.length(), new Timestamp(super.lastModified()));
 	}
 }

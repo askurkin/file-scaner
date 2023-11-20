@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -49,7 +48,7 @@ public class ScanFolder {
 		}
 
 		FolderFile folderFile = folderFiles.get(fileName);
-		if (folderFile.getLastModified() < newestFile.getLastModified() && folderFile.getSize() != newestFile.getSize()) {
+		if (folderFile.lastModified() < newestFile.lastModified() && folderFile.getSize() != newestFile.getSize()) {
 			folderFiles.put(fileName, newestFile);
 		}
 	}
@@ -58,18 +57,18 @@ public class ScanFolder {
 		scanFiles(path, paternFiles);
 	}
 
-	public void scanFiles(String pathScan, Set<String> paternFiles) {
+	public void scanFiles(String pathScan, Set<String> paternFileNames) {
 		File dir = new File(pathScan);
 		for (File file : dir.listFiles()) {
 			if (file.isFile()) {
-				FolderFile folderFile = new FolderFile(file.getPath(), file.lastModified(), file.length());
-				if (paternFiles.contains(folderFile.getName())) {
+				FolderFile folderFile = new FolderFile(file.getPath());
+				if (paternFileNames.contains(folderFile.getName())) {
 					folderFiles.put(folderFile.getName(), folderFile);
 					logger.trace(folderFile);
 				}
 			}
 			if (file.isDirectory()) {
-				scanFiles(file.getPath(), paternFiles);
+				scanFiles(file.getPath(), paternFileNames);
 			}
 		}
 		logger.debug(pathScan + " found " + folderFiles.size() + " files");
