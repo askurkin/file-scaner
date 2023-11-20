@@ -36,7 +36,6 @@ public class Proccess {
 	}
 
 	public static void replace(FolderFile folderFileOld, FolderFile folderFileNew) {
-		// файл уже свежий
 		if (folderFileOld.equals(folderFileNew)) {
 			return;
 		}
@@ -76,7 +75,7 @@ public class Proccess {
 	}
 
 	public static boolean questions(FolderFile fromFile, FolderFile toFile) {
-		if (fromFile.equals(toFile) || !fromFile.exists()) {
+		if (fromFile.equals(toFile) || !fromFile.exists() || fromFile.getSize() == toFile.getSize()) {
 			logger.warn("Не доступно " + fromFile + " => " + toFile);
 			return false;
 		}
