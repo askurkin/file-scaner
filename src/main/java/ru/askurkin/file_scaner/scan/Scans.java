@@ -82,8 +82,11 @@ public class Scans {
 	}
 
 	public void copy(String toDir) {
-		idealFolder.getFiles().forEach((fileName, folderFile) -> {
-			Proccess.copyFile(folderFile.getFile(), new File(toDir + "\\" + fileName), folderFile.getSchema(), " rc.");
-		});
+		ScanFolder toFolder = scanFolders.get(toDir);
+		if (toFolder != null) {
+			idealFolder.getFiles().forEach((fileName, idealFile) -> {
+				Proccess.copyFile(idealFile, new FolderFile(toFolder.getPath(fileName)));
+			});
+		}
 	}
 }

@@ -2,7 +2,7 @@ package ru.askurkin.file_scaner.scan;
 
 import java.io.File;
 
-public class FolderFile {
+public class FolderFile extends File {
 	private String name;
 	private String path;
 	public final static String backup = "backup";
@@ -26,7 +26,22 @@ public class FolderFile {
 		return size - getSchema().length();
 	}
 
+	public String getBackupPath() {
+		return backupPath;
+	}
+
+
+	public FolderFile(String path) {
+		super(path);
+		this.path = path;
+		this.name = getFileNameWithDir(path);
+		this.backupPath = path.replace(this.name, "") + backup + "\\" + this.name;
+		this.lastModified = 0;
+		this.size = 0;
+	}
+
 	public FolderFile(String path, long lastModified, long size) {
+		super(path);
 		this.path = path;
 		this.name = getFileNameWithDir(path);
 		this.backupPath = path.replace(this.name, "") + backup + "\\" + this.name;
@@ -43,15 +58,23 @@ public class FolderFile {
 		return path.substring(path.lastIndexOf("\\", path.lastIndexOf("\\") - 1) + 1);
 	}
 
-	public File getFile() {
-		return new File(path);
+	public boolean existsBackup() {
+		return new File(backupPath).exists();
 	}
 
-	public File getBackupFile() {
+	public boolean restore() {
+		super.delete();
+		return new File(backupPath).renameTo(this);
+	}
+
+	public boolean backup() {
 		File mkDirs = new File(backupPath.substring(0, backupPath.lastIndexOf("\\")));
 		mkDirs.mkdirs();
+		return super.renameTo(new File(backupPath));
+	}
 
-		return new File(backupPath);
+	public void renameTo(FolderFile newFile) {
+		File file = new File(path);
 	}
 
 	@Override

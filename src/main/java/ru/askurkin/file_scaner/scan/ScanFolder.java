@@ -27,6 +27,10 @@ public class ScanFolder {
 		return name;
 	}
 
+	public String getPath(String fileName) {
+		return path + "\\" + fileName;
+	}
+
 	public ScanFolder() {
 		this.path = "";
 		folderFiles = new HashMap<>();
