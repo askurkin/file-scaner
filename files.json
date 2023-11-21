@@ -1,0 +1,122 @@
+[
+  {
+    "subFolder": "Indexes",
+    "files": [
+      "idx_db_drop_tables.sql",
+      "idx_log_list_dt.sql",
+      "idx_log_list_job.sql",
+      "idx_log_list_pk.sql",
+      "idx_log_list_tp.sql",
+      "log$api_idx.sql",
+      "log$api_name_uq.sql",
+      "log$api_pk.sql",
+      "log_pk.sql",
+      "lpv_log_name_uq.sql"
+    ]
+  },
+  {
+    "subFolder": "PackageBodies",
+    "files": [
+      "pkg_export_csv.sql",
+      "pkg_export_html.sql",
+      "pkg_export_sylk.sql",
+      "pkg_export_xlsx.sql",
+      "pkg_export_xml.sql",
+      "pkg_log.sql",
+      "pkg_logging.sql",
+      "pkg_mail.sql",
+      "pkg_run.sql",
+      "pkg_user_job_actions.sql",
+      "reports_pack.sql",
+      "zipblob.sql"
+    ]
+  },
+  {
+    "subFolder": "Packages",
+    "files": [
+      "pkg_export_csv.sql",
+      "pkg_export_html.sql",
+      "pkg_export_sylk.sql",
+      "pkg_export_xlsx.sql",
+      "pkg_export_xml.sql",
+      "pkg_log.sql",
+      "pkg_logging.sql",
+      "pkg_mail.sql",
+      "pkg_run.sql",
+      "pkg_user_job_actions.sql",
+      "reports_pack.sql",
+      "zipblob.sql"
+    ]
+  },
+  {
+    "subFolder": "Procedures",
+    "files": [
+      "add_err_msg.sql",
+      "alert_invalid.sql",
+      "alert_sched.sql",
+      "db_monitor.sql",
+      "put_log.sql",
+      "reraise.sql",
+      "send_mail.sql",
+      "send_mail_cp1251.sql",
+      "p_fill_obj_info_deps.sql"
+    ]
+  },
+  {
+    "subFolder": "SchedulerJobs",
+    "files": [
+      "job_db_alert.sql",
+      "job_db_alert_invalid.sql",
+      "job_db_monitor.sql",
+      "job_send_rpt_mail.sql"
+    ]
+  },
+  {
+    "subFolder": "Sequences",
+    "files": [
+      "err_log_pk_seq.sql",
+      "log$api_pk_seq.sql",
+      "log_list_seq.sql",
+      "log_list_seq_id.sql",
+      "seq_excel_slb.sql"
+    ]
+  },
+  {
+    "subFolder": "Tables",
+    "files": [
+      "log_list.sql",
+      "job_list.sql",
+      "db_drop_tables.sql",
+      "err_log.sql",
+      "invalid_obj.sql",
+      "log$.sql",
+      "log$api.sql",
+      "log$_param_values.sql",
+      "patch_source_replace.sql"
+    ]
+  },
+  {
+    "subFolder": "Triggers",
+    "files": [
+      "err_log_b_i.sql",
+      "log$api_b_i.sql",
+      "log$_param_values_b_i.sql",
+      "log_list_bi.sql"
+    ]
+  },
+  {
+    "subFolder": "Types",
+    "files": [
+      "ids_tab.sql",
+      "str_tab.sql"
+    ]
+  },
+  {
+    "subFolder": "Views",
+    "files": [
+      "v_db_drop_tables.sql",
+      "v_idx_no_used.sql",
+      "v_log_list_agg.sql"
+    ]
+  }
+]
