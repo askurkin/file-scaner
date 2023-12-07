@@ -10,10 +10,15 @@ public class SysFiles {
 	public List<String> getList() {
 		List<String> list = new ArrayList<>();
 		for (String file : files) {
-			list.add(subFolder + "\\" + file);
+			list.add(subFolder + "\\" + file.toLowerCase());
 		}
 
 		return list;
+	}
+
+	public SysFiles(String subFolder, List<String> files) {
+		this.subFolder = subFolder;
+		this.files = files;
 	}
 
 	@Override

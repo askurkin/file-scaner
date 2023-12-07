@@ -1,42 +1,62 @@
 [
   {
-    "name": "SPSS",
+    "folderName": "SPSS",
+    "baseName": "spss_test",
+    "schemaName" : "RC",
     "path": "C:\\Git\\rc\\Production\\SPSS\\RC\\src"
   },
   {
-    "name": "REPLICA",
+    "folderName": "REPLICA",
+    "baseName": "spss_test",
+    "schemaName" : "REPLICA",
     "path": "C:\\Git\\rc\\Production\\SPSS\\REPLICA\\src"
   },
   {
-    "name": "MDM",
+    "folderName": "MDM",
+    "baseName": "spss_test",
+    "schemaName" : "MDM",
     "path": "C:\\Git\\rc\\Production\\SPSS\\MDM\\src"
   },
   {
-    "name": "ANALIT",
+    "folderName": "ANALIT",
+    "baseName": "analit_test",
+    "schemaName" : "ANALITIC",
     "path": "C:\\Git\\rc\\Production\\ANALIT\\ANALITIC\\src"
   },
   {
-    "name": "STAT",
+    "folderName": "STAT",
+    "baseName": "stat_test",
+    "schemaName" : "RC",
     "path": "C:\\Git\\rc\\Production\\STAT\\RC\\src"
   },
   {
-    "name": "ORACLEBI",
+    "folderName": "ORACLEBI",
+    "baseName": "stat_test",
+    "schemaName" : "ORACLEBI",
     "path": "C:\\Git\\rc\\Production\\STAT\\ORACLEBI\\src"
   },
   {
-    "name": "FEES",
+    "folderName": "FEES",
+    "baseName": "fees-test",
+    "schemaName" : "RC",
     "path": "C:\\Git\\rc\\Production\\FEES\\RC\\src"
   },
   {
-    "name": "QW",
+    "folderName": "QW",
+    "baseName": "qw_test",
+    "schemaName" : "RC",
     "path": "C:\\Git\\rc\\Production\\QW\\RC\\src"
   },
   {
-    "name": "QWSTAT",
+    "folderName": "QWSTAT",
+    "baseName": "qwstat_test",
+    "schemaName" : "RC",
     "path": "C:\\Git\\rc\\Production\\QWSTAT\\RC\\src"
   },
   {
-    "name": "FINANCE",
+    "folderName": "FINANCE",
+    "baseName": "finance_test",
+    "schemaName" : "RC",
     "path": "C:\\Git\\rc\\Production\\FINANCE\\RC\\src"
   }
 ]

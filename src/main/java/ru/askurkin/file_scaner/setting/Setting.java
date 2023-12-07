@@ -22,6 +22,8 @@ public class Setting {
 	private List<SysFolders> sysFolders;
 	private Set<String> files;
 	private String filterDir;
+	private Gson gson;
+	private String basePass;
 
 	private static final Logger logger = LogManager.getLogger(Setting.class);
 
@@ -29,7 +31,7 @@ public class Setting {
 		return sysFolders;
 	}
 
-	public Set<String> getFiles() {
+	public Set<String> getSysFilesSet() {
 		return files;
 	}
 
@@ -37,13 +39,22 @@ public class Setting {
 		this.filterDir = filterDir;
 	}
 
+	public String getFilterDir() {
+		return filterDir;
+	}
+
+	public String getBasePass() {
+		return basePass;
+	}
+
+	public void setBasePass(String basePass) {
+		this.basePass = basePass;
+	}
+
 	public Setting() {
 		sysFolders = new ArrayList<>();
 		files = new HashSet<>();
-	}
-
-	public String getFilterDir() {
-		return filterDir;
+		gson = new Gson();
 	}
 
 	public boolean checkFilterDir(String dirName) {
@@ -79,7 +90,6 @@ public class Setting {
 	public void loadFolders(String fileName) {
 		String json = loadJson(fileName);
 
-		Gson gson = new Gson();
 		sysFolders = gson.fromJson(json, new TypeToken<ArrayList<SysFolders>>() {
 		}.getType());
 
@@ -89,8 +99,6 @@ public class Setting {
 	public void loadFiles(String fileName) {
 		String json = loadJson(fileName);
 
-
-		Gson gson = new Gson();
 		List<SysFiles> sysFiles = gson.fromJson(json, new TypeToken<ArrayList<SysFiles>>() {
 		}.getType());
 

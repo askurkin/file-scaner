@@ -6,9 +6,9 @@ import ru.askurkin.file_scaner.setting.SysFolders;
 import ru.askurkin.file_scaner.setting.Setting;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -16,15 +16,15 @@ import java.util.concurrent.Future;
 
 public class Scans {
 
-	Map<String, ScanFolder> scanFolders;
-	Setting setting;
-	ScanFolder idealFolder;
+	private Map<String, ScanFolder> scanFolders;
+	private Setting setting;
+	private ScanFolder idealFolder;
 	public static ExecutorService serv;
 	private static final Logger logger = LogManager.getLogger(Scans.class);
 
 	public Scans(Setting setting) {
 		this.setting = setting;
-		scanFolders = new HashMap<>();
+		scanFolders = new ConcurrentHashMap<>();
 	}
 
 	public void scanAllFolders() {
@@ -32,10 +32,10 @@ public class Scans {
 		serv = Executors.newFixedThreadPool(4);
 		for (SysFolders folder : setting.getSysFolders()) {
 			Future f = serv.submit(() -> {
-				ScanFolder scanFolder = new ScanFolder(folder.getName(), folder.getPath());
-				scanFolder.scanFiles(setting.getFiles());
-				scanFolders.put(folder.getName(), scanFolder);
-				logger.info(scanFolder.getName() + " scan completed, found " + scanFolder.getFiles().size() + " files");
+				ScanFolder scanFolder = new ScanFolder(folder);
+				scanFolder.scanFiles(setting.getSysFilesSet());
+				scanFolders.put(folder.getFolderName(), scanFolder);
+				logger.info(scanFolder.getFolderName() + " scan completed, found " + scanFolder.getFiles().size() + " files");
 			});
 			futures.add(f);
 		}
@@ -87,5 +87,19 @@ public class Scans {
 				Proccess.copy(idealFile, toFolder.getPath(fileName));
 			});
 		}
+	}
+
+	public void compile(String basePass) {
+		scanFolders.forEach((folderName, scanFolder) -> {
+			if (setting.checkFilterDir(folderName)) {
+				String baseName = scanFolder.getBaseName();
+				String schemaName = scanFolder.getSchemaName();
+				scanFolder.getFiles().forEach((fileName, folderFile) -> {
+					if (!folderFile.isNoVersions()) {
+						Proccess.compile(folderFile, schemaName, baseName, basePass);
+					}
+				});
+			}
+		});
 	}
 }

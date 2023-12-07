@@ -1,17 +1,23 @@
 package ru.askurkin.file_scaner.scan;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Scanner;
 
 public class Proccess {
@@ -21,28 +27,41 @@ public class Proccess {
 		if (inFile.equals(outFile)) {
 			throw new RuntimeException("Copy " + inFile.getPath() + " to self.");
 		}
-		try (DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream(inFile.getPath()))); DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(outFile.getPath())))) {
+		String version = inFile.getNewVersion();
+		boolean setVer = false;
+		try (BufferedReader in = new BufferedReader(new FileReader(inFile.getPath()));
+			 PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(outFile.getPath())))) {
 			String buff = in.readLine();
 			while (buff != null) {
-				out.writeBytes(buff.replace(inFile.getSchema(), outFile.getSchema()) + "\n");
+				String buffTrim = buff.trim().toLowerCase();
+				if (!setVer) {
+					if (!buff.contains(version)) {
+						if (buffTrim.equals("is") || buffTrim.equals("as") || buffTrim.contains(" is") || buffTrim.contains(" as") || buffTrim.contains(" trigger")) {
+							buff = buff + " " + version;
+							setVer = true;
+						}
+					} else {
+						setVer = true;
+					}
+				}
+				out.println(buff);
 				buff = in.readLine();
 			}
 			out.flush();
-		} catch (FileNotFoundException e) {
-			throw new RuntimeException(e);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	public static void replace(FolderFile folderFileOld, FolderFile folderFileNew) {
-		if (folderFileOld.equals(folderFileNew)) {
+		if (folderFileOld.equals(folderFileNew) || folderFileOld.isUniqueVersion()) {
 			return;
 		}
 
 		if (questions(folderFileNew, folderFileOld)) {
 			if (folderFileOld.existsBackup()) {
-				throw new RuntimeException("Backup " + folderFileOld.getName() + " is exists, try delete backup!!");
+				folderFileOld.deleteBackup();
+				//throw new RuntimeException("Backup " + folderFileOld.getName() + " is exists, try delete backup!!");
 			}
 			folderFileOld.backup();
 			copyFile(folderFileNew, folderFileOld);
@@ -55,10 +74,7 @@ public class Proccess {
 			logger.warn("File " + backupFile.getPath() + " not exists");
 			return;
 		}
-
-		if (questions(backupFile, folderFile)) {
-			folderFile.restore();
-		}
+		folderFile.restore();
 	}
 
 	public static void copy(FolderFile folderFile, String newFileName) {
@@ -75,7 +91,7 @@ public class Proccess {
 	}
 
 	public static boolean questions(FolderFile fromFile, FolderFile toFile) {
-		if (fromFile.equals(toFile) || !fromFile.exists() || fromFile.getSize() == toFile.getSize()) {
+		if (fromFile.equals(toFile) || !fromFile.exists() || fromFile.length() == toFile.length()) {
 			logger.warn("Не доступно " + fromFile + " => " + toFile);
 			return false;
 		}
@@ -89,5 +105,36 @@ public class Proccess {
 			return true;
 		}
 		return false;
+	}
+
+	public static void compile(FolderFile folderFile, String schemaName, String baseName, String basePass) {
+		String sqlSrypt = null;
+		try {
+			sqlSrypt = new String(Files.readAllBytes(Paths.get(folderFile.getPath())), StandardCharsets.UTF_8);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+
+		if (folderFile.getPath().contains("Views") && sqlSrypt.lastIndexOf("/") == sqlSrypt.length() - 1) {
+			sqlSrypt = sqlSrypt.substring(0, sqlSrypt.length() - 2);
+		}
+
+		try {
+			DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+
+		try (Connection connection = DriverManager.getConnection("jdbc:oracle:oci:" + schemaName + "/" + basePass + "@" + baseName)) {
+			try (Statement statement = connection.createStatement()) {
+				statement.execute(sqlSrypt);
+				logger.info(folderFile + " compile " + schemaName + "@" + baseName);
+			} catch (SQLException ex) {
+				logger.error(folderFile + ":" + schemaName + "@" + baseName + ":" + ex.getMessage());
+				throw new RuntimeException(ex.getMessage());
+			}
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }
